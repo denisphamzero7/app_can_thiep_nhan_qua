@@ -1,0 +1,80 @@
+[
+  {
+    "id": 1,
+    "grade": "mam_non",
+    "category": "nhan_biet",
+    "question_text": "Đâu là quả Dâu Tây?",
+    "speech_text": "Bé hãy tìm xem đâu là quả dâu tây nhé!",
+    "options": [
+      {"color": "red", "label": "Quả Dâu Tây 🍓", "is_correct": true},
+      {"color": "green", "label": "Quả Chuối 🍌", "is_correct": false},
+      {"color": "yellow", "label": "Quả Cam 🍊", "is_correct": false},
+      {"color": "blue", "label": "Quả Nho 🍇", "is_correct": false}
+    ]
+  },
+  {
+    "id": 2,
+    "grade": "mam_non",
+    "category": "nhan_biet",
+    "question_text": "Con nào kêu 'Gâu Gâu'?",
+    "speech_text": "Con nào kêu gâu gâu vậy bé?",
+    "options": [
+      {"color": "red", "label": "Con Mèo 🐱", "is_correct": false},
+      {"color": "green", "label": "Con Chó 🐶", "is_correct": true},
+      {"color": "yellow", "label": "Con Vịt 🦆", "is_correct": false},
+      {"color": "blue", "label": "Con Bò 🐮", "is_correct": false}
+    ]
+  },
+  {
+    "id": 3,
+    "grade": "mam_non",
+    "category": "dem_hinh",
+    "question_text": "Có bao nhiêu chú Thỏ? 🐰 🐰 🐰",
+    "speech_text": "Bé đếm xem có bao nhiêu chú thỏ nhé!",
+    "options": [
+      {"color": "red", "label": "2 chú", "is_correct": false},
+      {"color": "green", "label": "3 chú", "is_correct": true},
+      {"color": "yellow", "label": "4 chú", "is_correct": false},
+      {"color": "blue", "label": "5 chú", "is_correct": false}
+    ]
+  },
+  {
+    "id": 4,
+    "grade": "lop_1",
+    "category": "toan",
+    "question_text": "5 + 3 bằng bao nhiêu?",
+    "speech_text": "Năm cộng ba bằng bao nhiêu vậy con?",
+    "options": [
+      {"color": "red", "label": "7", "is_correct": false},
+      {"color": "green", "label": "8", "is_correct": true},
+      {"color": "yellow", "label": "9", "is_correct": false},
+      {"color": "blue", "label": "6", "is_correct": false}
+    ]
+  },
+  {
+    "id": 5,
+    "grade": "lop_2",
+    "category": "toan",
+    "question_text": "6 x 7 bằng bao nhiêu?",
+    "speech_text": "Sáu nhân bảy bằng bao nhiêu con nhỉ?",
+    "options": [
+      {"color": "red", "label": "36", "is_correct": false},
+      {"color": "green", "label": "42", "is_correct": true},
+      {"color": "yellow", "label": "48", "is_correct": false},
+      {"color": "blue", "label": "54", "is_correct": false}
+    ]
+  },
+  {
+    "id": 6,
+    "grade": "lop_1",
+    "category": "tieng_anh",
+    "question_text": "'Con Mèo' tiếng Anh là gì?",
+    "speech_text": "Con mèo trong tiếng Anh đọc là gì vậy con?",
+    "options": [
+      {"color": "red", "label": "Dog", "is_correct": false},
+      {"color": "green", "label": "Cat", "is_correct": true},
+      {"color": "yellow", "label": "Bird", "is_correct": false},
+      {"color": "blue", "label": "Fish", "is_correct": false}
+    ]
+  }
+]

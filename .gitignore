@@ -1,0 +1,53 @@
+# Composer
+/vendor/
+composer.phar
+composer.lock
+
+# Environment
+.env
+.env.backup
+.env.production
+*.env
+
+# Node & Frontend
+/node_modules/
+npm-debug.log
+yarn-error.log
+/dist/
+/.vite/
+
+# Flutter / Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+/build/
+android/.gradle
+android/captures/
+android/gradlew
+android/gradlew.bat
+android/local.properties
+android/**/GeneratedPluginRegistrant.java
+ios/
+macos/
+linux/
+windows/
+web/
+
+# IDE & OS
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
+
+# Storage & Logs
+/storage/*.key
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
