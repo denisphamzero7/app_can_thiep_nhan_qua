@@ -1,4 +1,4 @@
-import { axiosClient } from '@/core/api/axiosClient'
+import axiosClient from '@/core/api/axiosClient'
 import { Endpoints } from '@/core/api/endpoints'
 
 export const tvInterventionService = {

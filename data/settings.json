@@ -1,9 +1,9 @@
 {
-  "is_active": true,
-  "interval_minutes": 10,
-  "daily_limit_minutes": 60,
-  "target_grade": "mam_non",
-  "questions_to_pass": 1,
-  "max_penalty_cap": 5,
-  "updated_at": "2026-11-05 17:20:00"
+    "is_active": true,
+    "interval_minutes": 15,
+    "daily_limit_minutes": 60,
+    "target_grade": "mam_non",
+    "questions_to_pass": 1,
+    "max_penalty_cap": 5,
+    "updated_at": "2026-11-05 10:43:54"
 }
