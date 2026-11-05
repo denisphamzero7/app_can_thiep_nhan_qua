@@ -80,6 +80,11 @@ const navSections = [
     heading: 'NGHIỆP VỤ QUẢN LÝ',
     items: [
       {
+        title: 'Can Thiệp TV (Nhân Quả)',
+        to: '/tv-intervention',
+        icon: 'mdi-television-box',
+      },
+      {
         title: 'Danh sách thiết bị',
         to: '/equipments',
         icon: 'mdi-cube-outline',

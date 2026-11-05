@@ -53,6 +53,15 @@ export const Endpoints = Object.freeze({
     RENAME_BLOCK: '/api/motel/structure/rename-block',
     DELETE_BLOCK: '/api/motel/structure/delete-block',
   },
+  TV_INTERVENTION: {
+    STATUS: '/api/tv-intervention/status',
+    SETTINGS: '/api/tv-intervention/settings',
+    TOGGLE: '/api/tv-intervention/toggle',
+    QUESTIONS: '/api/tv-intervention/questions',
+    STORE_QUESTION: '/api/tv-intervention/questions',
+    DELETE_QUESTION: id => `/api/tv-intervention/questions/${id}`,
+    REPORT: '/api/tv-intervention/report',
+  },
   ORGANIZATION: {
     INDEX: '/api/organizations',
     PUBLIC_OPTIONS: '/api/organizations/public-options',

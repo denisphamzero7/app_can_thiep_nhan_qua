@@ -35,6 +35,11 @@ Route::get('/organizations/public-options', [\App\Modules\Core\OrganizationContr
 
 // các yêu cầu không cần đăng nhập (ví dụ: xem bài viết công khai) thì đặt route ở đây, không cần middleware auth:sanctum
 
+// Module Can Thiệp Nhân Quả TV (Cho cả TV App và Dashboard phụ huynh)
+Route::prefix('tv-intervention')->group(function () {
+    require base_path('app/Modules/TvIntervention/Routes/tv_intervention.php');
+});
+
 // Route yêu cầu đăng nhập (Bearer token) và đặt ngữ cảnh team cho Spatie Permission
 Route::middleware(['auth:sanctum', 'set.permissions.team', 'log.activity'])->group(function () {
     Route::get('/user', [AuthController::class, 'me']);

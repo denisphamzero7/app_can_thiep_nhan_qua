@@ -7,11 +7,12 @@ import authRoutes from '@/modules/auth/routes'
 import dashboardRoutes from '@/modules/dashboard/routes'
 import equipmentRoutes from '@/modules/equipment/routes'
 import roomRoutes from '@/modules/room/routes'
+import tvInterventionRoutes from '@/modules/tv-intervention/routes'
 
 /**
  * [1. MỤC ĐÍCH]
  * Định nghĩa cây điều hướng URL (Vue Router) cho toàn bộ ứng dụng:
- * Gom cụm các route từ các module độc lập (Auth, Dashboard, Equipment, Room).
+ * Gom cụm các route từ các module độc lập (Auth, Dashboard, Equipment, Room, TvIntervention).
  */
 const routes = [
   {
@@ -22,6 +23,7 @@ const routes = [
   ...dashboardRoutes,
   ...equipmentRoutes,
   ...roomRoutes,
+  ...tvInterventionRoutes,
   {
     path: '/:pathMatch(.*)*',
     redirect: '/dashboard',
