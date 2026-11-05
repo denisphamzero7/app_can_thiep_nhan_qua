@@ -20,13 +20,26 @@ Dự án kế thừa hệ thống quy tắc phát triển phần mềm chuẩn m
 
 ---
 
-## 🛡️ 2. Quy tắc An toàn & Bảo mật
+## 🐳 2. Quy tắc Bắt buộc: Tự động Build & Cập nhật Docker sau mỗi lần sửa code thành công
+- **Mục tiêu:** Đảm bảo container Docker luôn chạy mã nguồn và bản build Frontend/Backend mới nhất, người dùng chỉ cần F5 là thấy ngay kết quả.
+- **Quy trình thực hiện bắt buộc cho Agent:**
+  1. **Khi có thay đổi Frontend (Vue/JS/CSS):**
+     - Chạy `npm run build` tại thư mục `Frontend` để tạo bản build mới (`Frontend/dist`).
+     - Đồng bộ bản build vào container: `docker cp Frontend/dist/. equipment_manager-app-1:/var/www/html/public/` (nếu chạy Docker).
+  2. **Khi có thay đổi Backend (PHP/Config/Migrations):**
+     - Kiểm tra cú pháp PHP: `php -l <file>`.
+     - Xóa cache Laravel: `php artisan optimize:clear`.
+  3. Báo cáo trạng thái đồng bộ cho người dùng sau mỗi lượt sửa code.
+
+---
+
+## 🛡️ 3. Quy tắc An toàn & Bảo mật
 - Luôn kiểm tra `.gitignore` để đảm bảo các file nhạy cảm (`.env`, `storage/`, `vendor/`, `node_modules/`, tokens) không bị lộ.
 - Giữ vững tính toàn vẹn của code và các tài liệu liên quan trong dự án.
 
 ---
 
-## 🏗️ 3. Kiến trúc Hệ thống & Phân chia Trách nhiệm
-1. **Web Dashboard (Phụ huynh):** Quản trị câu hỏi, cấu hình thời gian đếm ngược, nút gạt khẩn cấp BẬT/TẮT từ xa.
+## 🏗️ 4. Kiến trúc Hệ thống & Phân chia Trách nhiệm
+1. **Web Dashboard (Phụ huynh):** Quản trị câu hỏi, cấu hình thời gian đếm ngược, nút gạt khẩn cấp BẬT/TẮT từ xa (Kế thừa nền tảng Laravel + Vue 3).
 2. **App TV (Trẻ em - Flutter):** Chạy ngầm trên Android TV, giao diện sinh động, Text-To-Speech tiếng Việt, chọn đáp án bằng 4 nút màu remote (🔴 🟢 🟡 🔵), hoạt động 100% offline và tự sinh câu hỏi.
 3. **Docs (`docs/`):** Tài liệu đặc tả kỹ thuật, luồng dữ liệu, API, và hướng dẫn cài đặt.

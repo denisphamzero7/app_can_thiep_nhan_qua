@@ -1,0 +1,153 @@
+<script setup>
+import { computed } from 'vue'
+
+const props = defineProps({
+  rooms: {
+    type: Array,
+    default: () => [],
+  },
+  totalRooms: {
+    type: Number,
+    default: 0,
+  },
+  selectedRoomId: {
+    type: [Number, String],
+    default: null,
+  },
+})
+
+const emit = defineEmits(['select-room', 'reset-filters'])
+
+const quickSelectItems = computed(() => {
+  return props.rooms.map(r => ({
+    value: r.id,
+    title: `Phòng ${r.room_number} (${r.block || 'Khu chính'})`,
+  }))
+})
+</script>
+
+<template>
+  <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3.5 lg:sticky lg:top-20 transition-colors">
+    <!-- Header -->
+    <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+      <div>
+        <h3 class="text-xs font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wider flex items-center gap-1.5">
+          <v-icon icon="mdi-format-list-bulleted" size="16" class="text-primary" />
+          <span>Danh sách phòng</span>
+        </h3>
+        <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
+          {{ rooms.length }} phòng hiển thị
+        </p>
+      </div>
+      <v-chip size="x-small" color="primary" variant="tonal" class="font-bold font-mono">
+        {{ rooms.length }}/{{ totalRooms }}
+      </v-chip>
+    </div>
+
+    <!-- Quick select dropdown for fast jump -->
+    <div>
+      <v-select
+        :model-value="selectedRoomId"
+        :items="quickSelectItems"
+        item-title="title"
+        item-value="value"
+        density="compact"
+        variant="outlined"
+        hide-details
+        prepend-inner-icon="mdi-door"
+        :placeholder="rooms.length === 0 ? 'Không có phòng phù hợp...' : 'Chọn nhanh phòng...'"
+        :disabled="rooms.length === 0"
+        no-data-text="Không có phòng phù hợp"
+        @update:model-value="val => emit('select-room', val)"
+      />
+    </div>
+
+    <!-- Vertical Room Cards List -->
+    <div class="space-y-1.5 max-h-[600px] overflow-y-auto pr-1 scrollbar-thin">
+      <div v-if="rooms.length === 0" class="py-8 text-center text-slate-400 dark:text-slate-500 text-xs">
+        <v-icon icon="mdi-filter-off-outline" size="32" class="text-slate-300 dark:text-slate-600 mb-1.5 block mx-auto" />
+        Không tìm thấy phòng phù hợp.
+        <button
+          class="text-primary dark:text-blue-400 block mx-auto mt-2 font-bold hover:underline cursor-pointer"
+          @click="emit('reset-filters')"
+        >
+          Đặt lại bộ lọc
+        </button>
+      </div>
+
+      <button
+        v-for="room in rooms"
+        :key="room.id"
+        type="button"
+        class="w-full text-left p-2.5 sm:p-3 rounded-lg text-xs transition-all duration-150 flex items-center justify-between border cursor-pointer group"
+        :class="selectedRoomId === room.id
+          ? 'bg-blue-50/90 dark:bg-blue-950/70 text-blue-900 dark:text-blue-200 border-primary shadow-xs ring-1 ring-primary/30 font-bold'
+          : 'bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-200 border-slate-200/90 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'"
+        @click="emit('select-room', room.id)"
+      >
+        <div class="min-w-0 pr-2">
+          <div class="flex items-center gap-1.5">
+            <v-icon
+              icon="mdi-door"
+              size="15"
+              :class="selectedRoomId === room.id ? 'text-primary' : 'text-slate-400 dark:text-slate-500'"
+            />
+            <span class="text-sm font-black truncate text-slate-900 dark:text-slate-100">Phòng {{ room.room_number }}</span>
+          </div>
+          <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+            {{ room.block || 'Block A' }} • Tầng {{ room.floor ?? 1 }}
+          </div>
+          <div v-if="room.shared_wifi_issue" class="text-[10px] text-rose-600 dark:text-rose-400 font-bold mt-0.5 flex items-center gap-1 animate-pulse">
+            <v-icon icon="mdi-wifi-alert" size="12" />
+            <span>Mất Wifi ké (P.{{ room.shared_wifi_issue.source_room_number }} sự cố)</span>
+          </div>
+          <div v-else-if="room.dependent_rooms && room.dependent_rooms.length" class="text-[10px] text-indigo-600 dark:text-indigo-400 font-medium mt-0.5 flex items-center gap-1">
+            <v-icon icon="mdi-access-point-network" size="12" />
+            <span>Phát Wifi: {{ room.dependent_rooms.length }} phòng</span>
+          </div>
+        </div>
+
+        <!-- Badge right indicator -->
+        <div class="shrink-0 text-right">
+          <span
+            v-if="room.shared_wifi_issue"
+            class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 dark:bg-rose-950/70 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60 animate-pulse flex items-center gap-1"
+            :title="room.shared_wifi_issue.message"
+          >
+            <v-icon icon="mdi-wifi-alert" size="11" />
+            Mất Wifi ké
+          </span>
+          <span
+            v-else-if="room.badge_color === 'green'"
+            class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60"
+          >
+            ✓ Đạt chuẩn
+          </span>
+          <span
+            v-else-if="room.stats?.missing_count > 0"
+            class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 dark:bg-rose-950/70 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60"
+          >
+            Thiếu {{ room.stats.missing_count }}
+          </span>
+          <span
+            v-else-if="room.stats?.broken_count > 0"
+            class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 dark:bg-rose-950/70 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60"
+          >
+            {{ room.stats.broken_count }} hỏng
+          </span>
+          <span
+            v-else-if="room.stats?.maintenance_count > 0"
+            class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60"
+          >
+            Bảo trì
+          </span>
+          <span
+            v-else
+            class="w-2.5 h-2.5 rounded-full inline-block"
+            :class="room.badge_color === 'green' ? 'bg-emerald-500' : (room.badge_color === 'red' ? 'bg-rose-500' : 'bg-amber-500')"
+          />
+        </div>
+      </button>
+    </div>
+  </div>
+</template>

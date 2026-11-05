@@ -1,22 +1,36 @@
-# Composer
-/vendor/
-composer.phar
-composer.lock
-
-# Environment
+# Root environment
 .env
-.env.backup
-.env.production
-*.env
+.env.*
+!.env.example
+!.env.docker.example
+
+# Composer & PHP
+/vendor/
+/Backend/vendor/
+composer.phar
+*.log
 
 # Node & Frontend
 /node_modules/
+/Backend/node_modules/
+/Frontend/node_modules/
+/Frontend/dist/
+/.vite/
 npm-debug.log
 yarn-error.log
-/dist/
-/.vite/
 
-# Flutter / Dart
+# Laravel Storage & Cache
+/Backend/storage/*.key
+/Backend/storage/logs/*
+/Backend/storage/framework/cache/*
+/Backend/storage/framework/sessions/*
+/Backend/storage/framework/views/*
+/Backend/public/storage
+/Backend/public/hot
+/Backend/public/build
+/storage/
+
+# Flutter / Android
 .dart_tool/
 .packages
 .pub-cache/
@@ -27,12 +41,6 @@ android/captures/
 android/gradlew
 android/gradlew.bat
 android/local.properties
-android/**/GeneratedPluginRegistrant.java
-ios/
-macos/
-linux/
-windows/
-web/
 
 # IDE & OS
 .idea/
@@ -44,10 +52,3 @@ web/
 *.sw?
 .DS_Store
 Thumbs.db
-
-# Storage & Logs
-/storage/*.key
-/storage/logs/*
-/storage/framework/cache/*
-/storage/framework/sessions/*
-/storage/framework/views/*

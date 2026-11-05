@@ -1,0 +1,128 @@
+import { AbilityBuilder, createMongoAbility } from '@casl/ability'
+import { SuperAdminRoles } from '../enums/UserRole'
+
+/**
+ * Định nghĩa Ability từ danh sách quyền (permissions) và vai trò (roles) của User.
+ * Hỗ trợ phân quyền CASL linh hoạt cho toàn bộ module.
+ */
+export function defineRulesFor(user = null, permissions = []) {
+  const { can, cannot, build } = new AbilityBuilder(createMongoAbility)
+
+  if (!user) {
+    // Khách vãng lai: chỉ được đọc các trang public
+    cannot('manage', 'all')
+    return build()
+  }
+
+  // 1. Kiểm tra vai trò Super Admin / Admin
+  const isSuperAdmin = 
+    user.is_super_admin === true ||
+    user.roles?.some(r => {
+      const name = typeof r === 'string' ? r : r?.name
+      return name === 'Super Admin' || name === 'Admin' || (Array.isArray(SuperAdminRoles) && SuperAdminRoles.includes(name))
+    }) ||
+    user.assignments?.some(a => {
+      const name = a?.role_name || a?.name
+      return name === 'Super Admin' || name === 'Admin' || (Array.isArray(SuperAdminRoles) && SuperAdminRoles.includes(name))
+    }) ||
+    permissions.includes('*') ||
+    permissions.includes('all')
+
+  if (isSuperAdmin) {
+    // Super Admin & Admin có toàn quyền quản trị
+    can('manage', 'all')
+    return build()
+  }
+
+  // Dashboard: Luôn cho phép mọi người dùng đã đăng nhập đọc và truy cập Dashboard
+  can('read', 'Dashboard')
+  can('index', 'Dashboard')
+
+  // 2. Map từng quyền chi tiết từ Spatie Permissions sang CASL Actions/Subjects
+  permissions.forEach(perm => {
+    const permName = typeof perm === 'string' ? perm : perm.name
+
+    if (!permName) return
+
+    // Module Trang thiết bị (Equipments)
+    if (permName === 'equipments.index' || permName === 'equipments.show') {
+      can('read', 'Equipment')
+      can('index', 'Equipment')
+    }
+    if (permName === 'equipments.create' || permName === 'equipments.store') {
+      can('create', 'Equipment')
+    }
+    if (permName === 'equipments.edit' || permName === 'equipments.update') {
+      can('update', 'Equipment')
+    }
+    if (permName === 'equipments.delete' || permName === 'equipments.destroy') {
+      can('delete', 'Equipment')
+    }
+    if (permName === 'equipments.assign' || permName === 'equipments.assignToRoom') {
+      can('assign', 'Equipment')
+    }
+    if (permName === 'equipments.report_broken' || permName === 'equipments.reportBroken') {
+      can('report_broken', 'Equipment')
+    }
+    if (permName === 'equipments.map_view' || permName === 'equipments.mapView') {
+      can('map_view', 'Equipment')
+      can('read', 'Equipment')
+    }
+    if (permName === 'equipments.stats') {
+      can('stats', 'Equipment')
+    }
+    if (permName === 'equipments.export') {
+      can('export', 'Equipment')
+    }
+    if (permName === 'equipments.import') {
+      can('import', 'Equipment')
+    }
+
+    // Module Phòng (Rooms / Motel)
+    if (permName.startsWith('rooms.') || permName.startsWith('motel.')) {
+      can('read', 'Room')
+      can('index', 'Room')
+      if (permName === 'motel.update' || permName === 'rooms.edit' || permName === 'rooms.update') {
+        can('update', 'Room')
+      }
+      if (permName === 'motel.store' || permName === 'rooms.create' || permName === 'rooms.store') {
+        can('create', 'Room')
+      }
+      if (permName === 'motel.destroy' || permName === 'rooms.delete' || permName === 'rooms.destroy') {
+        can('delete', 'Room')
+      }
+      if (permName === 'motel.export') {
+        can('export', 'Room')
+      }
+      if (permName === 'motel.import') {
+        can('import', 'Room')
+      }
+    }
+  })
+
+  const permissionNames = new Set(permissions.map(permission =>
+    typeof permission === 'string' ? permission : permission?.name
+  ).filter(Boolean))
+  const accessPermissions = [
+    ['users', 'Users'],
+    ['roles', 'Roles'],
+    ['permissions', 'Permissions'],
+  ]
+  accessPermissions.forEach(([prefix, subject]) => {
+    if (
+      permissionNames.has(`${prefix}.index`) ||
+      permissionNames.has(`${prefix}.show`) ||
+      (prefix === 'permissions' && permissionNames.has('permissions.tree'))
+    ) {
+      can('read', subject)
+    }
+    if (prefix === 'permissions' && permissionNames.has('permissions.tree')) {
+      can('tree', subject)
+    }
+    if (permissionNames.has(`${prefix}.store`)) can('create', subject)
+    if (permissionNames.has(`${prefix}.update`)) can('update', subject)
+    if (permissionNames.has(`${prefix}.destroy`)) can('delete', subject)
+  })
+
+  return build()
+}

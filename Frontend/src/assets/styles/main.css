@@ -1,0 +1,268 @@
+:root {
+  --app-font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  font-family: var(--app-font-family);
+  background-color: #f8fafc;
+  color: #1e293b;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html.dark body {
+  background-color: #0b1120;
+  color: #f1f5f9;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Vuetify Typography Override */
+.v-application {
+  font-family: var(--app-font-family) !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Dark mode scrollbar */
+html.dark ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+html.dark .glass-panel {
+  background: rgba(15, 23, 42, 0.85);
+  border-color: rgba(51, 65, 85, 0.8);
+}
+
+/* Vuetify Controls in Dark Mode */
+html.dark .v-field--variant-outlined .v-field__outline {
+  --v-field-border-opacity: 0.35;
+  color: #475569 !important;
+}
+
+html.dark .v-field--variant-outlined.v-field--focused .v-field__outline {
+  --v-field-border-opacity: 1;
+  color: #3b82f6 !important;
+}
+
+html.dark .v-field__input {
+  color: #f1f5f9 !important;
+}
+
+html.dark .v-field {
+  background-color: #0f172a !important;
+  border-radius: 0.75rem !important;
+}
+
+html.dark .v-select .v-field,
+html.dark .v-combobox .v-field,
+html.dark .v-autocomplete .v-field {
+  background-color: #0f172a !important;
+}
+
+html.dark .v-overlay__content .v-list {
+  background-color: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+html.dark .v-list-item-title {
+  color: #e2e8f0 !important;
+}
+
+html.dark .v-card {
+  background-color: #0f172a !important;
+  border-color: #1e293b !important;
+  color: #f1f5f9 !important;
+}
+
+html.dark .v-sheet {
+  background-color: #0f172a !important;
+  color: #f1f5f9 !important;
+}
+
+/* Dark Mode Table & Typography Overrides */
+html.dark table {
+  color: #f1f5f9 !important;
+}
+
+html.dark table th {
+  color: #94a3b8 !important;
+  background-color: #0f172a !important;
+}
+
+html.dark table td {
+  color: #e2e8f0 !important;
+  border-color: #1e293b !important;
+}
+
+/* Ép toàn bộ các thẻ text thông dụng trong ô bảng hiển thị sáng rõ */
+html.dark table td .text-slate-900,
+html.dark table td .text-slate-800 {
+  color: #f8fafc !important;
+}
+
+html.dark table td .text-slate-700,
+html.dark table td .text-slate-600 {
+  color: #e2e8f0 !important;
+}
+
+html.dark table td .text-slate-500 {
+  color: #cbd5e1 !important;
+}
+
+html.dark table td .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+html.dark table td .text-blue-600 {
+  color: #60a5fa !important;
+}
+
+/* Các badge / pill phụ trong bảng */
+html.dark table td .bg-slate-100 {
+  background-color: #1e293b !important;
+  color: #f1f5f9 !important;
+  border: 1px solid #334155 !important;
+}
+
+html.dark table td .bg-blue-50 {
+  background-color: rgba(30, 58, 138, 0.35) !important;
+  color: #93c5fd !important;
+  border-color: rgba(96, 165, 250, 0.4) !important;
+}
+
+html.dark table td .bg-sky-50 {
+  background-color: rgba(14, 116, 144, 0.35) !important;
+  color: #7dd3fc !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+}
+
+html.dark table td .v-btn {
+  color: #cbd5e1 !important;
+}
+
+html.dark table td .v-btn:hover {
+  color: #ffffff !important;
+}
+
+html.dark .v-divider {
+  border-color: #1e293b !important;
+}
+
+html.dark input,
+html.dark select,
+html.dark textarea {
+  color: #f8fafc !important;
+}
+
+/* ==========================================================================
+   DARK MODE ENFORCEMENT & CONTRAST OPTIMIZATION
+   Ghi đè triệt để helper class .bg-white !important của Vuetify khi ở Dark Mode
+   Đảm bảo độ tương phản cao, chữ trắng sáng rõ trên nền tối Slate sâu
+   ========================================================================== */
+html.dark .bg-white {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+html.dark [class*="dark:bg-slate-900"] {
+  background-color: #0f172a !important;
+}
+
+html.dark [class*="dark:bg-slate-800"] {
+  background-color: #1e293b !important;
+}
+
+html.dark [class*="dark:bg-slate-950"] {
+  background-color: #020617 !important;
+}
+
+html.dark [class*="dark:text-slate-100"] {
+  color: #f8fafc !important;
+}
+
+html.dark [class*="dark:text-slate-200"] {
+  color: #e2e8f0 !important;
+}
+
+html.dark [class*="dark:text-slate-300"] {
+  color: #cbd5e1 !important;
+}
+
+html.dark [class*="dark:text-slate-400"] {
+  color: #94a3b8 !important;
+}
+
+html.dark [class*="dark:border-slate-800"] {
+  border-color: #1e293b !important;
+}
+
+html.dark [class*="dark:border-slate-700"] {
+  border-color: #334155 !important;
+}
+
+/* ==========================================================================
+   SMOOTH THEME TRANSITION & VIEW TRANSITIONS API (GPU ACCELERATED, ZERO LAG)
+   
+   Ghi chú kiến trúc:
+   1. animation: none - Tắt cross-fade mặc định của trình duyệt để nhường chỗ
+      cho animation clip-path hình tròn mở rộng do JavaScript điều khiển.
+   2. mix-blend-mode: normal - Ngăn chặn trình duyệt tự động blend màu làm sai
+      lệch độ tương phản hoặc xuất hiện bóng mờ khi chuyển layer.
+   3. will-change: clip-path - Báo cho trình duyệt đưa layer vào luồng xử lý
+      phần cứng GPU (GPU Compositor layer), ngăn ngừa drop khung hình (giật/lag).
+   4. z-index: Layer mới (::view-transition-new) luôn nằm trên cùng (z-index: 9999)
+      để vòng tròn mở rộng nuốt trọn giao diện cũ nằm ở dưới (z-index: 1).
+   ========================================================================== */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  will-change: clip-path;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+}
+

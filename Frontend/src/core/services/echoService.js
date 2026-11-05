@@ -1,0 +1,108 @@
+import { storage, StorageKeys } from '@/core/helpers/storage'
+
+let echoInstance = null
+let echoInitialization = null
+let initializationGeneration = 0
+
+export async function initEcho() {
+  if (echoInstance) {
+    return echoInstance
+  }
+  if (echoInitialization) {
+    return echoInitialization
+  }
+
+  const generation = initializationGeneration
+  const initialization = (async () => {
+    const [{ default: Echo }, { default: Pusher }] = await Promise.all([
+      import('laravel-echo'),
+      import('pusher-js'),
+    ])
+    if (generation !== initializationGeneration) return null
+    window.Pusher = Pusher
+
+  const isDevServer = window.location.port === '5173' || window.location.port === '3000'
+  const host = isDevServer && import.meta.env.VITE_REVERB_HOST ? import.meta.env.VITE_REVERB_HOST : window.location.hostname
+  const defaultPort = window.location.port ? Number(window.location.port) : (window.location.protocol === 'https:' ? 443 : 80)
+  const port = isDevServer && import.meta.env.VITE_REVERB_PORT ? Number(import.meta.env.VITE_REVERB_PORT) : defaultPort
+  const scheme = window.location.protocol === 'https:' ? 'https' : (import.meta.env.VITE_REVERB_SCHEME || 'http')
+
+  const instance = new Echo({
+    broadcaster: 'reverb',
+    key: import.meta.env.VITE_REVERB_APP_KEY || 'pnhau_core_reverb_key',
+    wsHost: host,
+    wsPort: port,
+    wssPort: port,
+    forceTLS: scheme === 'https',
+    enabledTransports: ['ws', 'wss'],
+    authorizer: (channel) => {
+      return {
+        authorize: (socketId, callback) => {
+          const currentToken = storage.get(StorageKeys.TOKEN)
+          const currentOrg = storage.get(StorageKeys.ORGANIZATION_ID)
+
+          const authHeaders = {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: `Bearer ${currentToken}`,
+          }
+          if (currentOrg) {
+            authHeaders['X-Organization-Id'] = String(currentOrg)
+          }
+
+          fetch('/api/broadcasting/auth', {
+            method: 'POST',
+            headers: authHeaders,
+            body: JSON.stringify({
+              socket_id: socketId,
+              channel_name: channel.name,
+            }),
+          })
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error(`Broadcast authorization failed: HTTP ${res.status}`)
+              }
+              return res.json()
+            })
+            .then((data) => callback(null, data))
+            .catch((err) => callback(err, null))
+        },
+      }
+    },
+  })
+
+    if (generation !== initializationGeneration) {
+      instance.disconnect()
+      return null
+    }
+    echoInstance = instance
+    return echoInstance
+  })()
+
+  echoInitialization = initialization
+  try {
+    return await initialization
+  } finally {
+    if (echoInitialization === initialization) {
+      echoInitialization = null
+    }
+  }
+}
+
+export function getEcho() {
+  return echoInstance || initEcho()
+}
+
+export function disconnectEcho() {
+  initializationGeneration += 1
+  echoInitialization = null
+
+  if (echoInstance) {
+    try {
+      echoInstance.disconnect()
+    } catch (e) {
+      console.warn('Echo disconnect error:', e)
+    }
+    echoInstance = null
+  }
+}
